@@ -11,12 +11,13 @@ router
     .get(catController.uploadPage)
     .post(catController.upload.single('image'),catController.createCat)
 
-// router 
-//     .route('/edit/:id')
-//     .get(catController.updateCat)
+router 
+    .route('/edit/:id')
+    .get(catController.editPage)
+    .post(catController.updateCat)
 
-// router
-//     .route('/delete/:id')
-//     .post(catController.deleteCat)
+router
+    .route('/delete/:id')
+    .post(catController.deleteCat)
 
 module.exports = router

@@ -4,7 +4,7 @@ const multer = require('multer')
 // multer configuration for image upload
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './public/images');
+        cb(null, './views/public/images');
     },
     filename: function(req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname);
@@ -33,7 +33,7 @@ const createCat = async (req, res) => {
         age: req.body.age,
         favoriteFood: req.body.favoriteFood,
         funFact: req.body.funFact,
-        image: req.body.filename //multer places the file info in req.file
+        image: req.file.filename //multer places the file info in req.file
     })
 
     await cat.save()
@@ -42,12 +42,41 @@ const createCat = async (req, res) => {
     } catch(err) {
       console.log(err)
     }
-    res.render('')
+}
+
+const editPage = async (req, res) => {
+    try {
+        const cat = await Cat.findById(req.params.id)
+        res.render('edit', {cat: cat}) // change ejs variables
+    } catch (err){
+        console.log(err)
+    }
+}
+
+const updateCat = async (req, res) => {
+    try {
+        await Cat.findByIdAndUpdate(req.params.id, req.body)
+        res.redirect('/')
+    } catch (err){
+        console.log(err)
+    }
+}
+
+const deleteCat = async (req, res)=> {
+    try {
+        await Cat.findByIdAndRemove(req.params.id)
+        res.redirect('/')
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 module.exports = {
     getAllCats,
     upload,
     uploadPage,
-    createCat
+    createCat,
+    editPage,
+    updateCat,
+    deleteCat
 }
